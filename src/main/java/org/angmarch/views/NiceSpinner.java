@@ -306,8 +306,11 @@ public class NiceSpinner extends AppCompatTextView {
     }
 
     public <T> void attachDataSource(List<T> list) {
-        adapter = new NiceSpinnerAdapter<>(getContext(), list, textColor, backgroundSelector,
+        if (list.size > 0)
+            adapter = new NiceSpinnerAdapter<>(getContext(), list, textColor, backgroundSelector,
                 spinnerTextFormatter);
+        else
+            adapter = null
         setAdapterInternal(adapter);
     }
 
@@ -321,7 +324,10 @@ public class NiceSpinner extends AppCompatTextView {
         // If the adapter needs to be settled again, ensure to reset the selected index as well
         selectedIndex = 0;
         listView.setAdapter(adapter);
-        setTextInternal(adapter.getItemInDataset(selectedIndex).toString());
+        if (adapter != null)
+            setTextInternal(adapter.getItemInDataset(selectedIndex).toString());
+        else
+            setTextInternal("");
     }
 
     @Override public boolean onTouchEvent(MotionEvent event) {
